@@ -118,17 +118,20 @@ Creates a normalizer object, passing as parameter the normalization to be used.
 
 The following normalizations are currently available:
 
-- sep-u-j
-- sep-w-h
+- sep
+  - Alphabet often seen in use by the Secretaría de Educación Pública (SEP) and the Instituto Nacional para la Educación de los Adultos (INEA). important characteristics of this alphabet are the use of "u" for the phoneme /w/, "k" for /k/, and "j" for /h/.
+- inali
+  - Alphabet in use by the Instituto Nacional de Lenguas Indígenas. Uses "w" for /w/, "k" for /k/, and "h" for /h/.
 - ack
+  - Alphabet initially used by Richard Andrews and subsequently by a number of other Nahuatl scholars. Named after Andrews, Campbell, and Karttunen. Uses "hu" for /w/, "c" and "qu" for /k/, and "h" for /h/.
 
-If an unsupported normalization is specified, sep-u-j will be used by default.
+If an unsupported normalization is specified, sep will be used by default.
 
 You can use the `normalize` method to normalize a text to the selected orthography. And the `to_phones` method to get
 the phonemes.
 
 ```python
->>> n = elotl.nahuatl.orthography.Normalizer("sep-u-j")
+>>> n = elotl.nahuatl.orthography.Normalizer("sep")
 >>> n.normalize(a[1][1])
 'au in ye yujki in on tlenamakak niman ye ik teixpan on motlalia se tlakatl itech mokaua.'
 >>> n.to_phones(a[1][1])
@@ -136,7 +139,7 @@ the phonemes.
 ```
 
 ```python
->>> n = elotl.nahuatl.orthography.Normalizer("sep-w-h")
+>>> n = elotl.nahuatl.orthography.Normalizer("inali")
 >>> n.normalize(a[1][1])
 'aw in ye yuhki in on tlenamakak niman ye ik teixpan on motlalia se tlakatl itech mokawa.'
 >>> n.to_phones(a[1][1])
@@ -169,24 +172,47 @@ test/                               Unit test scripts
 
 ## Development
 
-### Build FSTs
+### Requirements
 
-Requires [HFST](https://github.com/hfst/hfst) to be installed. Install it and build the FSTs with `make`.
+- python3
+- [HFST](https://github.com/hfst/hfst)
+- GNU make
+- virtualenv
+- Python packages
+  - setuptools
+  - wheel
+
+### Quick build
 
 ```bash
+virtualenv --python=/usr/bin/python3 venv
+source venv/bin/activate
 make all
 ```
-### Create a virtual environment and activate it.
+
+### Step by step
+
+#### Build FSTs
+
+Build the FSTs with `make`.
+
+```bash
+make fst
+```
+
+#### Create a virtual environment and activate it.
 
 ```bash
 virtualenv --python=/usr/bin/python3 venv
 source venv/bin/activate
 ```
-### Update `pip` and generate distribution files.
+
+#### Update `pip` and generate distribution files.
 
 ```bash
 python -m pip install --upgrade pip
 python -m pip install --upgrade setuptools wheel
+rm -rf build/ dist/
 python setup.py clean sdist bdist_wheel
 ```
 
